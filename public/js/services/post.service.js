@@ -14,7 +14,7 @@ app.factory('Post', function(DS) {
 
 	*/
   var PostFactory = DS.defineResource({
-    name: 'post',
+    name: 'posts',
     relations: {
       belongsTo: {
         users: {
