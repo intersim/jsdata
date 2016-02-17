@@ -13,7 +13,27 @@ app.factory('Post', function(DS) {
 				(HINT: see post.js)
 
 	*/
+  var PostFactory = DS.defineResource({
+    name: 'post',
+    relations: {
+      belongsTo: {
+        users: {
+          localKey: 'author',
+          localField: '_author'
+        }
+      }
+    },
+    methods: {
+      go: function () {
+        $state.go('post', {
+          postId: this._id,
+          authorId: this.author
+        })
+      }
+    }
+  })
 
-});
+  return PostFactory;
+}).run(function (Post) {})
 
 
