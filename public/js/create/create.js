@@ -4,31 +4,34 @@ app.config(function($stateProvider) {
 	$stateProvider.state('create', {
 		url: '/create/:userId',
 		templateUrl: 'js/create/create.html',
-		controller: 'CreateCtrl' 
-		/*
-				add a resolve block that has an author function which 
-				users $stateParams to retrieve the author object
-		*/
+		controller: 'CreateCtrl',
+		resolve: {
+			theAuthor: function (User, $stateParams) {
+				return User.find($stateParams.userId)
+			}
+		}
 	})
 })
 
 // add necessary dependencies here 
-app.controller('CreateCtrl', function($scope) {
+app.controller('CreateCtrl', function($scope, theAuthor, Post, $state) {
 
+	console.log('theAuthor: ', theAuthor.username);
 	$scope.previewTrue = false;
 
 	$scope.preview = function() {
 		$scope.previewTrue = !$scope.previewTrue;
 	}
 
-	/*
+	$scope.newPost = {author: theAuthor};
 
-	TODOS: 
-	1 - create the object that the form can use via ng-model
-  2 - create a function that 
-	 		a) persists the ng-modeled post object 
-			b) changes the state to 'main'  
+	// $scope.newPost.author = theAuthor.username || newPost.name
 
-	*/
-	
+	$scope.createNewPost = function () {
+		Post.create($scope.newPost)
+		.then(function (postData) {
+			console.log("postData: ", postData);
+			// $state.go('main', postData)
+		})
+	}
 }) 
